@@ -1,0 +1,91 @@
+---
+title: "Assignment 4 - Claire Mondong"
+author: "Claire Mondong"
+date: "8/3/2021"
+output: word_document
+# Introduction to the Dataset
+From this dataset, I would like to understand the age of people that has a high spending score. In addition, I would also like to see whether their income affects the variable spending score.
+
+# Importing and Cleaning the dataset
+The dataset that I am using is titled “The Dataset for Frequent Mall Customers”, which contains their identifying information such as their gender, customer ID, age, annual income, and respective spending score. 
+
+I imported the dataset to R by downloading the data set from the website to my laptop using the code below and renamed the dataset to X. 
+
+```{r}
+x<- read.csv("Mall_Customers.csv")library(stringr)
+
+```
+To check if the data was imported, I used the code head(x). The code ncol(x) used to verify the number of columns. The code colnames(x) is also to identify the column names. From the column names, we see that there are spelling erros and column names that are confusing to read. 
+
+```{r}
+head(x)
+ncol(x)
+colnames(x)
+```
+Next, I am going to rename the columns so that it provides clarity on what the data represents. The codes below are used to rename the columns. After running the code head(y), I see that the columns were renamed properly. 
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+y<-rename(x,Gender=Genre, AnnualIncome=Annual.Income..k..,SpendingScore=Spending.Score..1.100.)
+head(y)
+```
+
+Based on running the code below, we see that there are 200 rows of data. The average age of the customer is 38.85 with an average anunual income of 60.56 thousand dollar and an average spending score of 50.20. 
+```{r}
+summary(y)
+```
+I also ran a histogram to show the count of age class. Based on the histogram, our customers are dominated by people between the age of 30-35.
+
+```{r}
+hist(y$Age,col="blue",main="Histogram to Show Count of Age Class",xlab="Age Class",ylab="Frequency",labels=TRUE)
+```
+
+The code below was ran to identify the age year that has the highest average spending score. The age 39 has the highest average spending score of 84.67 compared to all other ages. 
+
+```{r}
+aggregate(x=y$SpendingScore,
++           by=list(y$Age), 
++           FUN=mean)
+```
+Next, I would like to see which age group has the highest annual income because my assumption is that the higher the income, the higher the spending score. My assumption was wrong. This is because people aged 39 does not have the highest average annual income, people aged 41 has the highest. 
+```{r}
+aggregate(x=y$AnnualIncome,
++           by=list(y$Age), 
++           FUN=mean)
+```
+
+To proof this even further, I ran a scatterplot to see the correlation between annual income and spending score. The result shows that there are no correlation between the 2 variables and confirms that I had the wrong assumption. 
+
+```{r}
+x<- y$AnnualIncome
+y <- y$SpendingScore
+plot(x,y,main="Scatterplot of Annual Income and Spending Score", xlab="Annual Income",ylab="Spending Score", frame=FALSE)
+```
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
